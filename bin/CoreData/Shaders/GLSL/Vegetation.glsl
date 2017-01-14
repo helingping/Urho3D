@@ -21,7 +21,11 @@ varying vec4 vWorldPos;
 #endif
 #ifdef PERPIXEL
     #ifdef SHADOW
-        varying vec4 vShadowPos[NUMCASCADES];
+        #ifndef GL_ES
+            varying vec4 vShadowPos[NUMCASCADES];
+        #else
+            varying highp vec4 vShadowPos[NUMCASCADES];
+        #endif
     #endif
     #ifdef SPOTLIGHT
         varying vec4 vSpotPos;
@@ -60,10 +64,10 @@ void VS()
     #endif
 
     #ifdef NORMALMAP
-        vec3 tangent = GetWorldTangent(modelMatrix);
-        vec3 bitangent = cross(tangent, vNormal) * iTangent.w;
+        vec4 tangent = GetWorldTangent(modelMatrix);
+        vec3 bitangent = cross(tangent.xyz, vNormal) * tangent.w;
         vTexCoord = vec4(GetTexCoord(iTexCoord), bitangent.xy);
-        vTangent = vec4(tangent, bitangent.z);
+        vTangent = vec4(tangent.xyz, bitangent.z);
     #else
         vTexCoord = GetTexCoord(iTexCoord);
     #endif

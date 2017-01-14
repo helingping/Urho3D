@@ -1,6 +1,6 @@
 //
 
-// Copyright (c) 2008-2016 the Urho3D project.
+// Copyright (c) 2008-2017 the Urho3D project.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -52,6 +52,7 @@ SourceBatch::SourceBatch() :
     geometry_(0),
     worldTransform_(&Matrix3x4::IDENTITY),
     numWorldTransforms_(1),
+    instancingData_((void*)0),
     geometryType_(GEOM_STATIC)
 {
 }
@@ -72,6 +73,7 @@ SourceBatch& SourceBatch::operator =(const SourceBatch& rhs)
     material_ = rhs.material_;
     worldTransform_ = rhs.worldTransform_;
     numWorldTransforms_ = rhs.numWorldTransforms_;
+    instancingData_ = rhs.instancingData_;
     geometryType_ = rhs.geometryType_;
 
     return *this;
@@ -552,7 +554,8 @@ bool WriteDrawablesToOBJ(PODVector<Drawable*> drawables, File* outputFile, bool 
                 if (hasUV || (hasLMUV && writeLightmapUV))
                 {
                     // if writing Lightmap UV is chosen, only use it if TEXCOORD2 exists, otherwise use TEXCOORD1
-                    unsigned texCoordOffset = (writeLightmapUV && hasLMUV) ? VertexBuffer::GetElementOffset(*elements, TYPE_VECTOR2, SEM_TEXCOORD, 1) : VertexBuffer::GetElementOffset(*elements, TYPE_VECTOR2, SEM_TEXCOORD, 9);
+                    unsigned texCoordOffset = (writeLightmapUV && hasLMUV) ? VertexBuffer::GetElementOffset(*elements, TYPE_VECTOR2, SEM_TEXCOORD, 1) :
+                        VertexBuffer::GetElementOffset(*elements, TYPE_VECTOR2, SEM_TEXCOORD, 0);
                     for (unsigned j = 0; j < vertexCount; ++j)
                     {
                         Vector2 uvCoords = *((const Vector2*)(&vertexData[(vertexStart + j) * elementSize + texCoordOffset]));

@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2008-2016 the Urho3D project.
+// Copyright (c) 2008-2017 the Urho3D project.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -85,6 +85,13 @@ void TileMap2D::DrawDebugGeometry(DebugRenderer* debug, bool depthTest)
         debug->AddLine(Vector2(mapW, mapH), Vector2(0.0f, mapH), color);
         debug->AddLine(Vector2(0.0f, mapH), Vector2(0.0f, 0.0f), color);
         break;
+
+    case O_HEXAGONAL:
+        debug->AddLine(Vector2(0.0f, 0.0f), Vector2(mapW, 0.0f), color);
+        debug->AddLine(Vector2(mapW, 0.0f), Vector2(mapW, mapH), color);
+        debug->AddLine(Vector2(mapW, mapH), Vector2(0.0f, mapH), color);
+        debug->AddLine(Vector2(0.0f, mapH), Vector2(0.0f, 0.0f), color);
+        break;
     }
 
     for (unsigned i = 0; i < layers_.Size(); ++i)
@@ -122,8 +129,7 @@ void TileMap2D::SetTmxFile(TmxFile2D* tmxFile)
 
     if (!rootNode_)
     {
-        rootNode_ = GetNode()->CreateChild("_root_", LOCAL);
-        rootNode_->SetTemporary(true);
+        rootNode_ = GetNode()->CreateTemporaryChild("_root_", LOCAL);
     }
 
     unsigned numLayers = tmxFile_->GetNumLayers();
@@ -133,8 +139,7 @@ void TileMap2D::SetTmxFile(TmxFile2D* tmxFile)
     {
         const TmxLayer2D* tmxLayer = tmxFile_->GetLayer(i);
 
-        Node* layerNode(rootNode_->CreateChild(tmxLayer->GetName(), LOCAL));
-        layerNode->SetTemporary(true);
+        Node* layerNode(rootNode_->CreateTemporaryChild(tmxLayer->GetName(), LOCAL));
 
         TileMapLayer2D* layer = layerNode->CreateComponent<TileMapLayer2D>();
         layer->Initialize(this, tmxLayer);

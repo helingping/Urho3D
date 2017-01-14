@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2008-2016 the Urho3D project.
+# Copyright (c) 2008-2017 the Urho3D project.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,7 +20,9 @@
 # THE SOFTWARE.
 #
 
-cmake_minimum_required (VERSION 2.6.3)
+if (DEFINED CMAKE_CROSSCOMPILING)
+    return ()
+endif ()
 
 if (CMAKE_TOOLCHAIN_FILE)
     # Reference toolchain variable to suppress "unused variable" warning

@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2008-2016 the Urho3D project.
+// Copyright (c) 2008-2017 the Urho3D project.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -385,6 +385,8 @@ bool TmxFile2D::EndLoad()
         info_.orientation_ = O_ISOMETRIC;
     else if (orientation == "staggered")
         info_.orientation_ = O_STAGGERED;
+    else if (orientation == "hexagonal")
+        info_.orientation_ = O_HEXAGONAL;
     else
     {
         URHO3D_LOGERROR("Unsupported orientation type " + orientation);

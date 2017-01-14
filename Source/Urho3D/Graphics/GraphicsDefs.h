@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2008-2016 the Urho3D project.
+// Copyright (c) 2008-2017 the Urho3D project.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -31,7 +31,7 @@ namespace Urho3D
 class Vector3;
 
 /// Graphics capability support level. Web platform (Emscripten) also uses OpenGL ES, but is considered a desktop platform capability-wise
-#if defined(ANDROID) || defined(IOS) || defined(RPI)
+#if defined(IOS) || defined(__ANDROID__) || defined(__arm__) || defined(__aarch64__)
 #define MOBILE_GRAPHICS
 #else
 #define DESKTOP_GRAPHICS
@@ -56,8 +56,10 @@ enum GeometryType
     GEOM_INSTANCED = 2,
     GEOM_BILLBOARD = 3,
     GEOM_DIRBILLBOARD = 4,
-    GEOM_STATIC_NOINSTANCING = 5,
-    MAX_GEOMETRYTYPES = 5,
+    GEOM_TRAIL_FACE_CAMERA = 5,
+    GEOM_TRAIL_BONE = 6,
+    GEOM_STATIC_NOINSTANCING = 7,
+    MAX_GEOMETRYTYPES = 7,
 };
 
 /// Blending mode.
@@ -227,6 +229,7 @@ enum TextureFilterMode
     FILTER_BILINEAR,
     FILTER_TRILINEAR,
     FILTER_ANISOTROPIC,
+    FILTER_NEAREST_ANISOTROPIC,
     FILTER_DEFAULT,
     MAX_FILTERMODES
 };
@@ -350,10 +353,11 @@ enum FaceCameraMode
     FC_ROTATE_Y,
     FC_LOOKAT_XYZ,
     FC_LOOKAT_Y,
-    FC_DIRECTION
+    FC_LOOKAT_MIXED,
+    FC_DIRECTION,
 };
 
-/// Shadow type
+/// Shadow type.
 enum ShadowQuality
 {
     SHADOWQUALITY_SIMPLE_16BIT = 0,
@@ -417,6 +421,10 @@ extern URHO3D_API const StringHash PSP_LIGHTMATRICES;
 extern URHO3D_API const StringHash PSP_VSMSHADOWPARAMS;
 extern URHO3D_API const StringHash PSP_ROUGHNESS;
 extern URHO3D_API const StringHash PSP_METALLIC;
+extern URHO3D_API const StringHash PSP_LIGHTRAD;
+extern URHO3D_API const StringHash PSP_LIGHTLENGTH;
+extern URHO3D_API const StringHash PSP_ZONEMIN;
+extern URHO3D_API const StringHash PSP_ZONEMAX;
 
 // Scale calculation from bounding box diagonal.
 extern URHO3D_API const Vector3 DOT_SCALE;

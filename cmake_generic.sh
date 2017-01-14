@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Copyright (c) 2008-2016 the Urho3D project.
+# Copyright (c) 2008-2017 the Urho3D project.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -52,6 +52,9 @@ for a in $@; do
             ;;
         -DRPI=1)
             if [[ ! $(uname -m) =~ ^arm ]]; then OPTS="-DCMAKE_TOOLCHAIN_FILE=$TOOLCHAINS/raspberrypi.toolchain.cmake"; fi
+            ;;
+        -DARM=1)
+            if [[ ! $(uname -m) =~ ^(arm|aarch64) ]]; then OPTS="-DCMAKE_TOOLCHAIN_FILE=$TOOLCHAINS/arm-linux.toolchain.cmake"; fi
             ;;
         -DWIN32=1)
             OPTS="-DCMAKE_TOOLCHAIN_FILE=$TOOLCHAINS/mingw.toolchain.cmake"

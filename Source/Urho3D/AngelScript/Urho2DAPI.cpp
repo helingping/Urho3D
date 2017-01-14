@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2008-2016 the Urho3D project.
+// Copyright (c) 2008-2017 the Urho3D project.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -127,6 +127,14 @@ template <class T> void RegisterStaticSprite2D(asIScriptEngine* engine, const ch
     engine->RegisterObjectMethod(className, "const Vector2& get_hotSpot() const", asMETHOD(T, GetHotSpot), asCALL_THISCALL);
     engine->RegisterObjectMethod(className, "void set_customMaterial(Material@+)", asMETHOD(T, SetCustomMaterial), asCALL_THISCALL);
     engine->RegisterObjectMethod(className, "Material@+ get_customMaterial() const", asMETHOD(T, GetCustomMaterial), asCALL_THISCALL);
+    engine->RegisterObjectMethod(className, "void set_useDrawRect(bool)", asMETHOD(T, SetUseDrawRect), asCALL_THISCALL);
+    engine->RegisterObjectMethod(className, "bool get_useDrawRect() const", asMETHOD(T, GetUseDrawRect), asCALL_THISCALL);
+    engine->RegisterObjectMethod(className, "void set_useTextureRect(bool)", asMETHOD(T, SetUseTextureRect), asCALL_THISCALL);
+    engine->RegisterObjectMethod(className, "bool get_useTextureRect() const", asMETHOD(T, GetUseTextureRect), asCALL_THISCALL);
+    engine->RegisterObjectMethod(className, "void set_drawRect(const Rect&)", asMETHOD(T, SetDrawRect), asCALL_THISCALL);
+    engine->RegisterObjectMethod(className, "const Rect& get_drawRect() const", asMETHOD(T, GetDrawRect), asCALL_THISCALL);
+    engine->RegisterObjectMethod(className, "void set_textureRect(const Rect&)", asMETHOD(T, SetTextureRect), asCALL_THISCALL);
+    engine->RegisterObjectMethod(className, "const Rect& get_textureRect() const", asMETHOD(T, GetTextureRect), asCALL_THISCALL);
 }
 
 static void RegisterStaticSprite2D(asIScriptEngine* engine)
@@ -162,6 +170,15 @@ static void RegisterAnimatedSprite2D(asIScriptEngine* engine)
     engine->RegisterObjectMethod("AnimatedSprite2D", "float get_speed() const", asMETHOD(AnimatedSprite2D, GetSpeed), asCALL_THISCALL);
 }
 
+static ParticleEffect2D* ParticleEffect2DClone(const String& cloneName, ParticleEffect2D* ptr)
+{
+    SharedPtr<ParticleEffect2D> clone = ptr->Clone(cloneName);
+    // The shared pointer will go out of scope, so have to increment the reference count
+    // (here an auto handle can not be used)
+    clone->AddRef();
+    return clone.Get();
+}
+
 static void RegisterParticleEffect2D(asIScriptEngine* engine)
 {
     engine->RegisterEnum("EmitterType2D");
@@ -169,6 +186,7 @@ static void RegisterParticleEffect2D(asIScriptEngine* engine)
     engine->RegisterEnumValue("EmitterType2D", "EMITTER_TYPE_RADIAL", EMITTER_TYPE_RADIAL);
 
     RegisterResource<ParticleEffect2D>(engine, "ParticleEffect2D");
+    engine->RegisterObjectMethod("ParticleEffect2D", "ParticleEffect2D@ Clone(const String&in cloneName = String()) const", asFUNCTION(ParticleEffect2DClone), asCALL_CDECL_OBJLAST);
 }
 
 static void RegisterParticleEmitter2D(asIScriptEngine* engine)
@@ -196,6 +214,7 @@ static void RegisterTileMapDefs2D(asIScriptEngine* engine)
     engine->RegisterEnumValue("Orientation2D", "O_ORTHOGONAL", O_ORTHOGONAL);
     engine->RegisterEnumValue("Orientation2D", "O_ISOMETRIC", O_ISOMETRIC);
     engine->RegisterEnumValue("Orientation2D", "O_STAGGERED", O_STAGGERED);
+    engine->RegisterEnumValue("Orientation2D", "O_HEXAGONAL", O_HEXAGONAL);
 
     engine->RegisterObjectType("TileMapInfo2D", 0, asOBJ_REF);
     engine->RegisterObjectBehaviour("TileMapInfo2D", asBEHAVE_ADDREF, "void f()", asFUNCTION(FakeAddRef), asCALL_CDECL_OBJLAST);
@@ -425,7 +444,7 @@ static void RegisterPhysicsWorld2D(asIScriptEngine* engine)
     engine->RegisterObjectMethod("PhysicsWorld2D", "uint get_velocityIterations() const", asMETHOD(PhysicsWorld2D, GetVelocityIterations), asCALL_THISCALL);
     engine->RegisterObjectMethod("PhysicsWorld2D", "void set_positionIterations(uint)", asMETHOD(PhysicsWorld2D, SetPositionIterations), asCALL_THISCALL);
     engine->RegisterObjectMethod("PhysicsWorld2D", "uint get_positionIterations() const", asMETHOD(PhysicsWorld2D, GetPositionIterations), asCALL_THISCALL);
-    engine->RegisterObjectMethod("PhysicsWorld2D", "void DrawDebugGeometry() const", asMETHOD(PhysicsWorld2D, DrawDebugGeometry), asCALL_THISCALL);
+    engine->RegisterObjectMethod("PhysicsWorld2D", "void DrawDebugGeometry() const", asMETHODPR(PhysicsWorld2D, DrawDebugGeometry, (), void), asCALL_THISCALL);
 
     engine->RegisterObjectMethod("Scene", "PhysicsWorld2D@+ get_physicsWorld2D() const", asFUNCTION(SceneGetPhysicsWorld2D), asCALL_CDECL_OBJLAST);
     engine->RegisterGlobalFunction("PhysicsWorld2D@+ get_physicsWorld2D()", asFUNCTION(GetPhysicsWorld2D), asCALL_CDECL);

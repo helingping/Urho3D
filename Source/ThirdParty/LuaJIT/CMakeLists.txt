@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2008-2016 the Urho3D project.
+# Copyright (c) 2008-2017 the Urho3D project.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -247,7 +247,7 @@ if (NOT LUAJIT_CACHE STREQUAL "${URHO3D_64BIT}-${LUAJIT_DISABLE_FFI}-${LUAJIT_DI
     # Makefile: Target system detection
     if (IOS)
         set (TARGET_SYS iOS)
-    elseif (ANDROID OR RPI)
+    elseif (CMAKE_SYSTEM_NAME STREQUAL Linux)
         set (TARGET_SYS Linux)
     elseif (MINGW)
         set (TARGET_SYS Windows)

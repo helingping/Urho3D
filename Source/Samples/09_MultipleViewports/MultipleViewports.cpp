@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2008-2016 the Urho3D project.
+// Copyright (c) 2008-2017 the Urho3D project.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -258,9 +258,9 @@ void MultipleViewports::MoveCamera(float timeStep)
 
     // Toggle post processing effects on the front viewport. Note that the rear viewport is unaffected
     RenderPath* effectRenderPath = GetSubsystem<Renderer>()->GetViewport(0)->GetRenderPath();
-    if (input->GetKeyPress('B'))
+    if (input->GetKeyPress(KEY_B))
         effectRenderPath->ToggleEnabled("Bloom");
-    if (input->GetKeyPress('F'))
+    if (input->GetKeyPress(KEY_F))
         effectRenderPath->ToggleEnabled("FXAA2");
 
     // Toggle debug geometry with space
